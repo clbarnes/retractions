@@ -4,8 +4,8 @@ import typing as tp
 from dataclasses import dataclass
 from urllib.request import Request
 
-from .base import Backend, Update, UpdateType
 from ..doi import DOI
+from .base import Backend, Update, UpdateType
 
 Jso = tp.Optional[tp.Union[tp.Dict[str, "Jso"], tp.List["Jso"], int, float, str]]
 

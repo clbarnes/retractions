@@ -9,8 +9,8 @@ import httpx
 
 from retractions.backends.base import UpdateType
 
-from .doi import DOI
 from .backends import registry
+from .doi import DOI
 
 logger = logging.getLogger(__name__)
 
