@@ -4,12 +4,11 @@ import sys
 import typing as tp
 from argparse import ArgumentParser
 from pathlib import Path
+from urllib.request import Request
 
 import httpx
 
-from retractions.backends.base import UpdateType
-
-from .backends import registry
+from .backends import UpdateType, registry
 from .doi import DOI
 
 logger = logging.getLogger(__name__)
@@ -31,15 +30,20 @@ def read_dois(p: tp.Optional[Path]) -> tp.Iterator[DOI]:
                 yield DOI.parse(line)
 
 
-async def fetch(urls) -> tp.List[tp.Optional[bytes]]:
+async def fetch(reqs: tp.List[Request]) -> tp.List[tp.Optional[bytes]]:
     contents = dict()
     async with httpx.AsyncClient() as client:
 
-        async def get(idx, url):
-            got = await client.get(url)
+        async def get(idx, req: Request):
+            got = await client.request(
+                req.get_method(),
+                req.full_url,
+                headers=dict(req.headers),
+                # todo: handle POST request data
+            )
             return idx, got
 
-        for coro in asyncio.as_completed(get(idx, url) for idx, url in enumerate(urls)):
+        for coro in asyncio.as_completed(get(idx, url) for idx, url in enumerate(reqs)):
             idx, r = await coro
             if r.status_code == 404:
                 contents[idx] = None
@@ -53,7 +57,9 @@ async def fetch(urls) -> tp.List[tp.Optional[bytes]]:
 def main(args=None):
     parser = ArgumentParser()
     parser.add_argument(
-        "doi", nargs="*", help="DOI to check for retractions or updates"
+        "doi",
+        nargs="*",
+        help="DOI to check for retractions or updates. Handled after --infile lists.",
     )
     parser.add_argument(
         "-r",
