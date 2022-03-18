@@ -30,9 +30,12 @@ class ORUpdate:
 @dataclass
 class OREntry:
     """
+    Note that this documentation is wrong, just copied from the site.
+
     {
         "retracted": false,  // whether or not the paper has been retracted
-        "timestamp": 1361836800000, // the UNIXtime when the original paper was published
+        // the UNIXtime when the original paper was published
+        "timestamp": 1361836800000,
         "update": {
             "timestamp": 1491464002919, // the UNIXtime when the update was recorded
             "doi": "10.1002/job.1858", // the DOI of the update
@@ -41,7 +44,9 @@ class OREntry:
         "doi": "10.1002/job.1787", // the DOI of the original paper
         "journal": "Journal of Organizational Behavior",
         "publisher": "Wiley-Blackwell",
-        "title": "Erratum: Cognitive and affective identification: Exploring the links between different forms of social identification and personality with work attitudes and behavior"
+        "title": "Erratum: Cognitive and affective identification:
+            Exploring the links between different forms of social "
+            "identification and personality with work attitudes and behavior"
     }
     """
 
