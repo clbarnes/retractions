@@ -33,3 +33,7 @@ clean-docs:
 docs: clean-docs
 	mkdir -p docs \
 	&& pdoc --html --output-dir docs retractions
+
+.PHONY: readme
+readme:
+	retractions --help | p2c --tgt _retractions README.md
